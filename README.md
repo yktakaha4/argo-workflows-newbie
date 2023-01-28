@@ -41,3 +41,20 @@ kubectl apply -f workflow.yaml
 - Guide
   - https://argoproj.github.io/argo-workflows/
   - https://dexidp.io/docs/connectors/github/
+
+## ToDo
+
+- [ ] Artifact repository
+  - https://argoproj.github.io/argo-workflows/configure-artifact-repository/
+- [ ] HA(with helm)
+  - https://argoproj.github.io/argo-workflows/high-availability/
+- [ ] Crash recovery
+  - https://argoproj.github.io/argo-workflows/cron-workflows/#crash-recovery
+- [ ] Slack notification
+  - https://argoproj.github.io/argo-workflows/workflow-notifications/
+- [ ] Cost optimization
+  - https://argoproj.github.io/argo-workflows/cost-optimisation/
+- [ ] Fargate(in AWS)
+  - https://github.com/argoproj/argo-workflows/issues/2502
+- [ ] Multiple containers
+  - https://argoproj.github.io/argo-workflows/container-set-template/
