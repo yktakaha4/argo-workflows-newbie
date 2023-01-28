@@ -28,6 +28,9 @@ kubectl port-forward -n argo svc/argo-workflows-server 2746:2746
 kubectl port-forward -n argo svc/dex 5556:5556
 
 open http://localhost:2746
+
+# Run workflow
+kubectl apply -f workflow.yaml
 ```
 
 ## Documents
