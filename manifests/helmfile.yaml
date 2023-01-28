@@ -1,9 +1,78 @@
 repositories:
+  - name: dex
+    url: https://charts.dexidp.io
   - name: argo
     url: https://argoproj.github.io/argo-helm
 
 releases:
+  - name: dex
+    namespace: argo
+    chart: dex/dex
+    version: 0.13.0
+    values:
+    - images:
+        tag: 2.35.3
+    - envVars:
+      - name: GITHUB_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            name: argo-sso-creds
+            key: github-client-id
+      - name: GITHUB_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: argo-sso-creds
+            key: github-client-secret
+    - config:
+        issuer: http://dex.argo.svc.cluster.local:5556
+        storage:
+          type: kubernetes
+          config:
+            inCluster: true
+        connectors:
+        - type: github
+          id: github
+          name: GitHub
+          config:
+            clientID: $GITHUB_CLIENT_ID
+            clientSecret: $GITHUB_CLIENT_SECRET
+            redirectURI: http://dex.argo.svc.cluster.local:5556/callback
+            orgs:
+            - name: pacahashi  # Your organization name
+            loadAllGroups: false
+        staticClients:
+        - name: GitHub OAuth Proxy
+          idEnv: GITHUB_CLIENT_ID
+          secretEnv: GITHUB_CLIENT_SECRET
+          redirectURIs:
+            - http://localhost:2746/oauth2/callback
   - name: argo-workflows
     namespace: argo
     chart: argo/argo-workflows
     version: 0.22.8
+    values:
+    - images:
+        tag: v3.4.4
+    - workflow:
+        serviceAccount:
+          create: true
+          name: argo-workflow-default-sa
+          annotations:
+            workflows.argoproj.io/rbac-rule: "true"
+            workflows.argoproj.io/rbac-rule-precedence: "0"
+        rbac:
+          create: true
+    - server:
+        extraArgs:
+        - --auth-mode=sso
+        sso:
+          issuer: http://dex.argo.svc.cluster.local:5556
+          clientId:
+            name: argo-sso-creds
+            key: github-client-id
+          clientSecret:
+            name: argo-sso-creds
+            key: github-client-secret
+          redirectUrl: http://localhost:2746/oauth2/callback
+          rbac:
+            enabled: true
