@@ -21,6 +21,10 @@ kubectl create secret -n argo generic argo-sso-creds \
     --from-literal=github-client-id=$GITHUB_CLIENT_ID \
     --from-literal=github-client-secret=$GITHUB_CLIENT_SECRET
 
+kubectl create secret -n app generic minio-creds \
+    --from-literal=minio-access-key=minio-access-key \
+    --from-literal=minio-secret-key=minio-secret-key
+
 helmfile apply
 
 # Connect to server
@@ -38,6 +42,7 @@ kubectl apply -f workflow.yaml
 - Helm chart parameters
   - https://artifacthub.io/packages/helm/argo/argo-workflows
   - https://artifacthub.io/packages/helm/dex/dex
+  - https://artifacthub.io/packages/helm/minio/minio
 - Guide
   - https://argoproj.github.io/argo-workflows/
   - https://dexidp.io/docs/connectors/github/

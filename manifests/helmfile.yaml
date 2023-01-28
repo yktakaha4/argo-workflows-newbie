@@ -3,6 +3,8 @@ repositories:
     url: https://charts.dexidp.io
   - name: argo
     url: https://argoproj.github.io/argo-helm
+  - name: minio
+    url: https://helm.min.io
 
 releases:
   - name: dex
@@ -76,3 +78,30 @@ releases:
           redirectUrl: http://localhost:2746/oauth2/callback
           rbac:
             enabled: true
+    - useDefaultArtifactRepo: true
+    - artifactRepository:
+        archiveLogs: true
+        s3:
+          useStaticCredentials: true
+          accessKeySecret:
+            name: minio-creds
+            key: minio-access-key
+          secretKeySecret:
+            name: minio-creds
+            key: minio-secret-key
+          bucket: argo-workflows-artifacts
+          endpoint: http://minio.argo.svc.cluster.local:9000
+          insecure: true
+
+  - name: minio
+    namespace: argo
+    chart: minio/minio
+    version: 8.0.10
+    values:
+    - image:
+        tag: RELEASE.2023-01-25T00-19-54Z.fips
+    - accessKey: minio-access-key
+    - secretKey: minio-secret-key
+    - defaultBucket:
+        enabled: true
+        name: argo-workflows-artifacts
