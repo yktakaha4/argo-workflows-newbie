@@ -63,3 +63,5 @@ kubectl apply -f workflow.yaml
   - https://github.com/argoproj/argo-workflows/issues/2502
 - [ ] Multiple containers
   - https://argoproj.github.io/argo-workflows/container-set-template/
+- [ ] Persistence
+  - https://argoproj.github.io/argo-workflows/workflow-archive/
