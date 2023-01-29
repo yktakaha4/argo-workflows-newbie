@@ -67,7 +67,7 @@ spec:
           parameters:
           - name: message
             value: hello again
-  - name: main-on-monday
+  - name: main-on-every-minutes
     dag:
       tasks:
       - name: inner-A
@@ -75,7 +75,7 @@ spec:
         arguments:
           parameters:
           - name: message
-            value: hello monday
+            value: hello every minutes
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: CronWorkflow
@@ -100,3 +100,27 @@ spec:
               templateRef:
                 name: workflow-template
                 template: main-on-monday
+---
+apiVersion: argoproj.io/v1alpha1
+kind: CronWorkflow
+metadata:
+  namespace: app
+  name: cron-workflow-on-every-minutes
+spec:
+  schedule: "* * * * *"
+  timezone: "Asia/Tokyo"
+  startingDeadlineSeconds: 0
+  concurrencyPolicy: "Allow"
+  successfulJobsHistoryLimit: 4
+  failedJobsHistoryLimit: 4
+  suspend: false
+  workflowSpec:
+    entrypoint: main
+    serviceAccountName: workflow-sa
+    templates:
+      - name: main
+        steps:
+          - - name: run
+              templateRef:
+                name: workflow-template
+                template: main-on-every-minutes
