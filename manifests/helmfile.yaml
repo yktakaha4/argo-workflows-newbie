@@ -90,8 +90,10 @@ releases:
             name: minio-creds
             key: minio-secret-key
           bucket: argo-workflows-artifacts
-          endpoint: http://minio.argo.svc.cluster.local:9000
+          keyFormat: {{`logs/{{workflow.creationTimestamp.Y}}-{{workflow.creationTimestamp.m}}-{{workflow.creationTimestamp.d}}/{{workflow.creationTimestamp.H}}-{{workflow.creationTimestamp.M}}-{{workflow.creationTimestamp.S}}/{{workflow.name}}/{{pod.name}}`}}
+          endpoint: minio.argo.svc.cluster.local:9000
           insecure: true
+          useSDKCreds: true
 
   - name: minio
     namespace: argo

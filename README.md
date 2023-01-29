@@ -49,7 +49,7 @@ kubectl apply -f workflow.yaml
 
 ## ToDo
 
-- [ ] Artifact repository
+- [x] Artifact repository
   - https://argoproj.github.io/argo-workflows/configure-artifact-repository/
 - [ ] HA(with helm)
   - https://argoproj.github.io/argo-workflows/high-availability/
